@@ -1,0 +1,30 @@
+{
+    "name": "diningclubgroup/cinema-api-client-php",
+    "description": "PHP Cinema API Client",
+    "authors": [
+        {
+            "name": "Thornton Phillis",
+            "email": "Thornton.phillis@tastecard.co.uk"
+        },
+        {
+            "name": "Michael Middleton",
+            "email": "Michael.middleton@tastecard.co.uk"
+        },
+        {
+            "name": "Thomas Gray",
+            "email": "thomas.gray@infinityworks.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "DCG\\Cinema": "lib/"
+        }
+    }
+}
