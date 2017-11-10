@@ -166,7 +166,7 @@ class ChainApi
                 '/chains/{chainId}/cinemas'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
@@ -254,7 +254,7 @@ class ChainApi
                 '/chains/{chainId}/ticket-types'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
@@ -328,7 +328,7 @@ class ChainApi
                 '/chains'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }

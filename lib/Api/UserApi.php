@@ -157,7 +157,7 @@ class UserApi
                 '/users'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
@@ -231,7 +231,7 @@ class UserApi
                 '/users/me'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
@@ -311,7 +311,7 @@ class UserApi
                 '/users'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
@@ -399,7 +399,7 @@ class UserApi
                 '/users/{userId}'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
@@ -487,7 +487,7 @@ class UserApi
                 '/users/{userId}/tokens'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
@@ -589,7 +589,7 @@ class UserApi
                 '/users/{userId}/tokens/{token}'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }

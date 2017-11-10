@@ -152,7 +152,7 @@ class TermsConditionsApi
                 '/terms-and-conditions'
             );
 
-            return [null, $statusCode, $httpHeader];
+            return [$response, $statusCode, $httpHeader];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
             }
