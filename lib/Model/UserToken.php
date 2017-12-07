@@ -11,8 +11,10 @@ class UserToken
      * @param string $token
      * @param int $expirationUnixTime
      */
-    public function __construct($token, $expirationUnixTime)
-    {
+    public function __construct(
+        $token,
+        $expirationUnixTime
+    ) {
         $this->token = $token;
         $this->expirationUnixTime = $expirationUnixTime;
     }

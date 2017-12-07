@@ -20,12 +20,18 @@ class UserTokenFactory
      * @return UserToken
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData($data)
+    public function createFromClientResponseData(array $data)
     {
-        if (!$this->fieldValidator->validate($data, array('token', 'expiration_date'))) {
+        if (!$this->fieldValidator->validate($data, array(
+            'token',
+            'expiration_date'
+        ))) {
             throw new UnexpectedResponseContentException();
         }
 
-        return new UserToken($data['token'], strtotime($data['expiration_date']));
+        return new UserToken(
+            $data['token'],
+            strtotime($data['expiration_date'])
+        );
     }
 }

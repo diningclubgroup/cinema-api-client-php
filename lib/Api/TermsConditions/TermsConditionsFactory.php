@@ -20,7 +20,7 @@ class TermsConditionsFactory
      * @return TermsConditions
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData($data)
+    public function createFromClientResponseData(array $data)
     {
         if (!$this->fieldValidator->validate($data, array('content'))) {
             throw new UnexpectedResponseContentException();

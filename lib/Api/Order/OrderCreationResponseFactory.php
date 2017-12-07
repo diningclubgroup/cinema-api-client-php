@@ -20,7 +20,7 @@ class OrderCreationResponseFactory
      * @return OrderCreationResponse
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData($data)
+    public function createFromClientResponseData(array $data)
     {
         if (!$this->fieldValidator->validate($data, array(
             'order_id',
