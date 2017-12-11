@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Functional\Mocks;
+namespace DCG\Cinema\Tests\Functional\Mocks;
 
 use DCG\Cinema\ActiveUserToken\ActiveUserToken;
 use DCG\Cinema\Model\UserToken;

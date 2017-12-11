@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\TicketType;
+namespace DCG\Cinema\Tests\Unit\Api\TicketType;
 
 use PHPUnit\Framework\TestCase;
 use DCG\Cinema\Validator\ClientResponseDataFieldValidator;

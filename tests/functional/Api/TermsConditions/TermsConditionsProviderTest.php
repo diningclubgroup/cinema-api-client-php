@@ -1,15 +1,16 @@
 <?php
 
-namespace Tests\Functional\Api\TermsConditions;
+namespace DCG\Cinema\Tests\Functional\Api\TermsConditions;
 
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
+use DCG\Cinema\Exception\UserNotAuthenticatedException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Tests\Functional\Mocks\MockGuzzleClientDi;
-use Tests\Functional\Mocks\MockGuzzleClientFactory;
-use Tests\Functional\Mocks\MockSession;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientDi;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientFactory;
+use DCG\Cinema\Tests\Functional\Mocks\MockSession;
 
 class TermsConditionsProviderTest extends TestCase
 {
@@ -65,6 +66,30 @@ class TermsConditionsProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedResponseContentException::class);
+
+        $di->getTermsConditionsProvider()->getTermsConditions();
+    }
+
+    public function testItThrowsOnInactiveUserToken()
+    {
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithInactiveUserToken(),
+            new MockGuzzleClientFactory(new MockHandler([]))
+        );
+
+        $this->expectException(UserNotAuthenticatedException::class);
+
+        $di->getTermsConditionsProvider()->getTermsConditions();
+    }
+
+    public function testItThrowsOnMissingUserToken()
+    {
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithNoUserToken(),
+            new MockGuzzleClientFactory(new MockHandler([]))
+        );
+
+        $this->expectException(UserNotAuthenticatedException::class);
 
         $di->getTermsConditionsProvider()->getTermsConditions();
     }

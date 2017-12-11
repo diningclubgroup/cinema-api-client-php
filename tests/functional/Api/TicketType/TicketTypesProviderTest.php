@@ -1,15 +1,16 @@
 <?php
 
-namespace Tests\Functional\Api\TicketType;
+namespace DCG\Cinema\Tests\Functional\Api\TicketType;
 
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
+use DCG\Cinema\Exception\UserNotAuthenticatedException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Tests\Functional\Mocks\MockGuzzleClientDi;
-use Tests\Functional\Mocks\MockGuzzleClientFactory;
-use Tests\Functional\Mocks\MockSession;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientDi;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientFactory;
+use DCG\Cinema\Tests\Functional\Mocks\MockSession;
 
 class TicketTypesProviderTest extends TestCase
 {
@@ -113,6 +114,30 @@ class TicketTypesProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedResponseContentException::class);
+
+        $di->getTicketTypesProvider()->getTicketTypes('chainId');
+    }
+
+    public function testItThrowsOnInactiveUserToken()
+    {
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithInactiveUserToken(),
+            new MockGuzzleClientFactory(new MockHandler([]))
+        );
+
+        $this->expectException(UserNotAuthenticatedException::class);
+
+        $di->getTicketTypesProvider()->getTicketTypes('chainId');
+    }
+
+    public function testItThrowsOnMissingUserToken()
+    {
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithNoUserToken(),
+            new MockGuzzleClientFactory(new MockHandler([]))
+        );
+
+        $this->expectException(UserNotAuthenticatedException::class);
 
         $di->getTicketTypesProvider()->getTicketTypes('chainId');
     }

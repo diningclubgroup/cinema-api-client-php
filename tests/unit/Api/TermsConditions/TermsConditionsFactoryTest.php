@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\TermsConditions;
+namespace DCG\Cinema\Tests\Unit\Api\TermsConditions;
 
 use PHPUnit\Framework\TestCase;
 use DCG\Cinema\Validator\ClientResponseDataFieldValidator;

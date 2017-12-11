@@ -3,21 +3,22 @@
 namespace DCG\Cinema\Request;
 
 use DCG\Cinema\ActiveUserToken\ActiveUserTokenProvider;
-use DCG\Cinema\Exception\UnexpectedStatusCodeException;
 use DCG\Cinema\Exception\UserNotAuthenticatedException;
-use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
 class Client implements ClientInterface
 {
     private $guzzleClientFactory;
     private $activeUserTokenProvider;
+    private $requestSender;
 
     public function __construct(
         GuzzleClientFactoryInterface $guzzleClientFactory,
-        ActiveUserTokenProvider $activeUserTokenProvider
+        ActiveUserTokenProvider $activeUserTokenProvider,
+        RequestSender $requestSender
     ) {
         $this->guzzleClientFactory = $guzzleClientFactory;
         $this->activeUserTokenProvider = $activeUserTokenProvider;
+        $this->requestSender = $requestSender;
     }
 
     /**
@@ -31,7 +32,7 @@ class Client implements ClientInterface
         }
 
         $guzzleClient = $this->guzzleClientFactory->create($userToken);
-        return $this->processRequest($guzzleClient, 'GET', $path, $queryParams, null, $successStatusCodes);
+        return $this->requestSender->sendRequest($guzzleClient, 'GET', $path, $queryParams, null, $successStatusCodes);
     }
 
     /**
@@ -45,7 +46,7 @@ class Client implements ClientInterface
         }
 
         $guzzleClient = $this->guzzleClientFactory->create($userToken);
-        return $this->processRequest($guzzleClient, 'POST', $path, [], $body, $successStatusCodes);
+        return $this->requestSender->sendRequest($guzzleClient, 'POST', $path, [], $body, $successStatusCodes);
     }
 
     /**
@@ -59,7 +60,7 @@ class Client implements ClientInterface
         }
 
         $guzzleClient = $this->guzzleClientFactory->create($userToken);
-        return $this->processRequest($guzzleClient, 'PATCH', $path, [], $body, $successStatusCodes);
+        return $this->requestSender->sendRequest($guzzleClient, 'PATCH', $path, [], $body, $successStatusCodes);
     }
 
     /**
@@ -68,7 +69,7 @@ class Client implements ClientInterface
     public function getUnauthenticated($path, $queryParams = [], $successStatusCodes = [200])
     {
         $guzzleClient = $this->guzzleClientFactory->createUnauthenticated();
-        return $this->processRequest($guzzleClient, 'GET', $path, $queryParams, null, $successStatusCodes);
+        return $this->requestSender->sendRequest($guzzleClient, 'GET', $path, $queryParams, null, $successStatusCodes);
     }
 
     /**
@@ -77,43 +78,6 @@ class Client implements ClientInterface
     public function postUnauthenticated($path, $body = null, $successStatusCodes = [201])
     {
         $guzzleClient = $this->guzzleClientFactory->createUnauthenticated();
-        return $this->processRequest($guzzleClient, 'POST', $path, [], $body, $successStatusCodes);
-    }
-
-    /**
-     * @param GuzzleClientInterface $guzzleClient
-     * @param string $type
-     * @param string $path
-     * @param array $queryParams
-     * @param string|null $body
-     * @param int[] $successStatusCodes
-     * @return ClientResponse
-     * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    private function processRequest($guzzleClient, $type, $path, $queryParams, $body, $successStatusCodes)
-    {
-        $options = [];
-        if ($body !== null) {
-            $options['body'] = $body;
-        }
-
-        $queryString = '';
-        if ($queryParams) {
-            $queryString .= '?' . http_build_query($queryParams);
-        }
-
-        $response = $guzzleClient->request($type, $path . $queryString, $options);
-
-        if (!in_array($response->getStatusCode(), $successStatusCodes)) {
-            throw new UnexpectedStatusCodeException($response->getStatusCode());
-        }
-
-        $content = json_decode((string) $response->getBody(), true);
-
-        return new ClientResponse(
-            isset($content['meta']) ? $content['meta'] : [],
-            isset($content['data']) ? $content['data'] : []
-        );
+        return $this->requestSender->sendRequest($guzzleClient, 'POST', $path, [], $body, $successStatusCodes);
     }
 }

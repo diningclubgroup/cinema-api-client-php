@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Chain;
+namespace DCG\Cinema\Tests\Unit\Api\Chain;
 
 use PHPUnit\Framework\TestCase;
 use DCG\Cinema\Validator\ClientResponseDataFieldValidator;

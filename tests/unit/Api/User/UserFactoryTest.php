@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\User;
+namespace DCG\Cinema\Tests\Unit\Api\User;
 
 use PHPUnit\Framework\TestCase;
 use DCG\Cinema\Validator\ClientResponseDataFieldValidator;

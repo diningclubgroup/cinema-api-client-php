@@ -16,6 +16,8 @@ class UnexpectedStatusCodeException extends \RuntimeException
      */
     public function __construct($statusCode, $message = null, $code = 0, $previous = null)
     {
+        $this->statusCode = $statusCode;
+
         if ($message === null) {
             $message = "Unexpected response status code: {$statusCode}";
         }

@@ -1,15 +1,16 @@
 <?php
 
-namespace Tests\Functional\Api\UserToken;
+namespace DCG\Cinema\Tests\Functional\Api\UserToken;
 
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
+use DCG\Cinema\Exception\UserNotAuthenticatedException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Tests\Functional\Mocks\MockGuzzleClientDi;
-use Tests\Functional\Mocks\MockGuzzleClientFactory;
-use Tests\Functional\Mocks\MockSession;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientDi;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientFactory;
+use DCG\Cinema\Tests\Functional\Mocks\MockSession;
 
 class UserTokenProviderTest extends TestCase
 {

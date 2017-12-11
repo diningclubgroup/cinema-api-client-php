@@ -1,15 +1,16 @@
 <?php
 
-namespace Tests\Functional\Api\Chain;
+namespace DCG\Cinema\Tests\Functional\Api\Chain;
 
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
+use DCG\Cinema\Exception\UserNotAuthenticatedException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Tests\Functional\Mocks\MockGuzzleClientDi;
-use Tests\Functional\Mocks\MockGuzzleClientFactory;
-use Tests\Functional\Mocks\MockSession;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientDi;
+use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientFactory;
+use DCG\Cinema\Tests\Functional\Mocks\MockSession;
 
 class ChainsProviderTest extends TestCase
 {
@@ -92,6 +93,30 @@ class ChainsProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedResponseContentException::class);
+
+        $di->getChainsProvider()->getChains();
+    }
+
+    public function testItThrowsOnInactiveUserToken()
+    {
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithInactiveUserToken(),
+            new MockGuzzleClientFactory(new MockHandler([]))
+        );
+
+        $this->expectException(UserNotAuthenticatedException::class);
+
+        $di->getChainsProvider()->getChains();
+    }
+
+    public function testItThrowsOnMissingUserToken()
+    {
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithNoUserToken(),
+            new MockGuzzleClientFactory(new MockHandler([]))
+        );
+
+        $this->expectException(UserNotAuthenticatedException::class);
 
         $di->getChainsProvider()->getChains();
     }

@@ -28,6 +28,7 @@ use DCG\Cinema\Api\UserToken\UserTokenProvider;
 use DCG\Cinema\Request\Client;
 use DCG\Cinema\Request\GuzzleClientFactory;
 use DCG\Cinema\Request\GuzzleClientFactoryInterface;
+use DCG\Cinema\Request\RequestSender;
 use DCG\Cinema\Validator\ClientResponseDataFieldValidator;
 use DCG\Cinema\Session\SessionInterface;
 
@@ -66,7 +67,8 @@ class Di
         GuzzleClientFactoryInterface $guzzleClientFactory
     ) {
         $activeUserTokenProvider = new ActiveUserTokenProvider($session);
-        $client = new Client($guzzleClientFactory, $activeUserTokenProvider);
+        $requestSender = new RequestSender();
+        $client = new Client($guzzleClientFactory, $activeUserTokenProvider, $requestSender);
 
         $clientResponseDataFieldValidator = new ClientResponseDataFieldValidator();
 

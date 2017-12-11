@@ -48,6 +48,7 @@ class GuzzleClientFactory implements GuzzleClientFactoryInterface
         return new GuzzleClient([
             'base_uri' => $baseUri,
             'headers' => $headers,
+            'http_errors' => false,
         ]);
     }
 
