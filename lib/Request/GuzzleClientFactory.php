@@ -6,7 +6,7 @@ use DCG\Cinema\Model\UserToken;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
-class GuzzleClientFactory
+class GuzzleClientFactory implements GuzzleClientFactoryInterface
 {
     private $host;
     private $clientToken;

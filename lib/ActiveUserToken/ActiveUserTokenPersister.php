@@ -19,6 +19,6 @@ class ActiveUserTokenPersister
      */
     public function persistUserToken(UserToken $userToken)
     {
-        $this->session->set('cinemaUserToken', $userToken);
+        $this->session->set(ActiveUserToken::SESSION_KEY_NAME, $userToken);
     }
 }

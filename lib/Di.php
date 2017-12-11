@@ -27,6 +27,7 @@ use DCG\Cinema\Api\UserToken\UserTokenFactory;
 use DCG\Cinema\Api\UserToken\UserTokenProvider;
 use DCG\Cinema\Request\Client;
 use DCG\Cinema\Request\GuzzleClientFactory;
+use DCG\Cinema\Request\GuzzleClientFactoryInterface;
 use DCG\Cinema\Validator\ClientResponseDataFieldValidator;
 use DCG\Cinema\Session\SessionInterface;
 
@@ -54,17 +55,16 @@ class Di
         $apiClientToken
     ) {
         if (self::$singleton === null) {
-            self::$singleton = new Di($session, $apiHost, $apiClientToken);
+            $guzzleClientFactory = new GuzzleClientFactory($apiHost, $apiClientToken);
+            self::$singleton = new Di($session, $guzzleClientFactory);
         }
         return self::$singleton;
     }
 
-    private function __construct(
+    protected function __construct(
         SessionInterface $session,
-        $apiHost,
-        $apiClientToken
+        GuzzleClientFactoryInterface $guzzleClientFactory
     ) {
-        $guzzleClientFactory = new GuzzleClientFactory($apiHost, $apiClientToken);
         $activeUserTokenProvider = new ActiveUserTokenProvider($session);
         $client = new Client($guzzleClientFactory, $activeUserTokenProvider);
 

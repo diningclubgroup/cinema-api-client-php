@@ -3,7 +3,6 @@
 namespace DCG\Cinema\Request;
 
 use DCG\Cinema\ActiveUserToken\ActiveUserTokenProvider;
-use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
 use DCG\Cinema\Exception\UserNotAuthenticatedException;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
@@ -14,7 +13,7 @@ class Client implements ClientInterface
     private $activeUserTokenProvider;
 
     public function __construct(
-        GuzzleClientFactory $guzzleClientFactory,
+        GuzzleClientFactoryInterface $guzzleClientFactory,
         ActiveUserTokenProvider $activeUserTokenProvider
     ) {
         $this->guzzleClientFactory = $guzzleClientFactory;

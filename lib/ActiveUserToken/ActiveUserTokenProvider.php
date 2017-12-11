@@ -19,7 +19,7 @@ class ActiveUserTokenProvider
      */
     public function getUserToken()
     {
-        $cinemaUserToken = $this->session->get('cinemaUserToken');
+        $cinemaUserToken = $this->session->get(ActiveUserToken::SESSION_KEY_NAME);
 
         if ($cinemaUserToken !== null && !$cinemaUserToken->hasExpired()) {
             return $cinemaUserToken;

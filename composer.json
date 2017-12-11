@@ -28,6 +28,11 @@
             "DCG\\Cinema\\": "lib/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "require-dev": {
         "phpunit/phpunit": "^7.0@dev"
     }

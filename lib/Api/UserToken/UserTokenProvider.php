@@ -28,7 +28,6 @@ class UserTokenProvider
     public function getToken($userId)
     {
         $clientResponse = $this->client->postUnauthenticated("users/{$userId}/tokens");
-        $data = $clientResponse->getData();
-        return $this->userTokenFactory->createFromClientResponseData($data);
+        return $this->userTokenFactory->createFromClientResponseData($clientResponse->getData());
     }
 }
