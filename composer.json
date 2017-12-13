@@ -20,11 +20,21 @@
         "php": ">=5.4",
         "ext-curl": "*",
         "ext-json": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "autoload": {
         "psr-4": {
             "DCG\\Cinema\\": "lib/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DCG\\Cinema\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0@dev",
+        "mockery/mockery": "^1.0"
     }
 }
