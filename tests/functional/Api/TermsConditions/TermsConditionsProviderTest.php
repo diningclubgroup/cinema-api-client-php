@@ -5,6 +5,7 @@ namespace DCG\Cinema\Tests\Functional\Api\TermsConditions;
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
 use DCG\Cinema\Exception\UserNotAuthenticatedException;
+use DCG\Cinema\Tests\Functional\Mocks\MockCache;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -36,6 +37,43 @@ class TermsConditionsProviderTest extends TestCase
         $this->assertCount(1, $requestHistory);
         $this->assertEquals('GET', $requestHistory[0]['request']->getMethod());
         $this->assertEquals('terms-and-conditions', (string)$requestHistory[0]['request']->getUri());
+    }
+
+    public function testItInteractsWithCache()
+    {
+        $mockCache = new MockCache();
+
+        // First request should hit the API
+        $mockGuzzleClientFactory = new MockGuzzleClientFactory(
+            new MockHandler([
+                new Response(200, [], json_encode([
+                    'data' => [
+                        'content' => 'contentValue',
+                    ],
+                ]))
+            ])
+        );
+
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithActiveUserToken(),
+            $mockGuzzleClientFactory,
+            $mockCache
+        );
+
+        $termsConditions = $di->getTermsConditionsProvider()->getTermsConditions();
+        $this->assertEquals('contentValue', $termsConditions->getContent());
+
+        // Second request should not hit the API but fetch from cache
+        $mockGuzzleClientFactory = new MockGuzzleClientFactory(new MockHandler([]));
+
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithActiveUserToken(),
+            $mockGuzzleClientFactory,
+            $mockCache
+        );
+
+        $termsConditions = $di->getTermsConditionsProvider()->getTermsConditions();
+        $this->assertEquals('contentValue', $termsConditions->getContent());
     }
 
     public function testItThrowsOnUnexpectedStatusCode()

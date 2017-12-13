@@ -8,8 +8,12 @@ class MockGuzzleClientDi extends Di
 {
     public static function buildMockDi(
         MockSession $mockSession,
-        MockGuzzleClientFactory $mockGuzzleClientFactory = null
+        MockGuzzleClientFactory $mockGuzzleClientFactory = null,
+        MockCache $mockCache = null
     ) {
-        return new Di($mockSession, $mockGuzzleClientFactory);
+        if ($mockCache === null) {
+            $mockCache = new MockCache();
+        }
+        return new Di($mockSession, $mockCache, $mockGuzzleClientFactory, 0, 0);
     }
 }

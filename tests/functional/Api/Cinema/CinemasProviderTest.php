@@ -5,6 +5,7 @@ namespace DCG\Cinema\Tests\Functional\Api\Cinema;
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
 use DCG\Cinema\Exception\UserNotAuthenticatedException;
+use DCG\Cinema\Tests\Functional\Mocks\MockCache;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -57,6 +58,56 @@ class CinemasProviderTest extends TestCase
         $this->assertCount(1, $requestHistory);
         $this->assertEquals('GET', $requestHistory[0]['request']->getMethod());
         $this->assertEquals('chains/chainIdValue/cinemas', (string)$requestHistory[0]['request']->getUri());
+    }
+
+    public function testItInteractsWithCache()
+    {
+        $mockCache = new MockCache();
+
+        $testExpectations = function ($cinemas) {
+            $this->assertCount(1, $cinemas);
+            $this->assertEquals('idValue0', $cinemas[0]->getId());
+            $this->assertEquals('nameValue0', $cinemas[0]->getName());
+            $this->assertEquals(true, $cinemas[0]->getIsExempt());
+            $this->assertEquals('locationValue0', $cinemas[0]->getLocationId());
+        };
+
+        // First request should hit the API
+        $mockGuzzleClientFactory = new MockGuzzleClientFactory(
+            new MockHandler([
+                new Response(200, [], json_encode([
+                    'data' => [
+                        [
+                            'id' => 'idValue0',
+                            'name' => 'nameValue0',
+                            'is_exempt' => true,
+                            'location_id' => 'locationValue0',
+                        ],
+                    ],
+                ]))
+            ])
+        );
+
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithActiveUserToken(),
+            $mockGuzzleClientFactory,
+            $mockCache
+        );
+
+        $cinemas = $di->getCinemasProvider()->getCinemas('chainId');
+        $testExpectations($cinemas);
+
+        // Second request should not hit the API but fetch from cache
+        $mockGuzzleClientFactory = new MockGuzzleClientFactory(new MockHandler([]));
+
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithActiveUserToken(),
+            $mockGuzzleClientFactory,
+            $mockCache
+        );
+
+        $cinemas = $di->getCinemasProvider()->getCinemas('chainId');
+        $testExpectations($cinemas);
     }
 
     public function testItThrowsOnUnexpectedStatusCode()

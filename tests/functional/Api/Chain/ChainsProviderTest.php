@@ -5,8 +5,11 @@ namespace DCG\Cinema\Tests\Functional\Api\Chain;
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
 use DCG\Cinema\Exception\UserNotAuthenticatedException;
+use DCG\Cinema\Request\ClientResponse;
+use DCG\Cinema\Tests\Functional\Mocks\MockCache;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
+use Mockery\Mock;
 use PHPUnit\Framework\TestCase;
 use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientDi;
 use DCG\Cinema\Tests\Functional\Mocks\MockGuzzleClientFactory;
@@ -61,6 +64,58 @@ class ChainsProviderTest extends TestCase
         $this->assertCount(1, $requestHistory);
         $this->assertEquals('GET', $requestHistory[0]['request']->getMethod());
         $this->assertEquals('chains', (string)$requestHistory[0]['request']->getUri());
+    }
+
+    public function testItInteractsWithCache()
+    {
+        $mockCache = new MockCache();
+
+        $testExpectations = function ($chains) {
+            $this->assertCount(1, $chains);
+            $this->assertEquals('idValue0', $chains[0]->getId());
+            $this->assertEquals('nameValue0', $chains[0]->getName());
+            $this->assertEquals(100, $chains[0]->getMaxTickets());
+            $this->assertEquals('introValue0', $chains[0]->getIntroductionInstructions());
+            $this->assertEquals('howToRedeemValue0', $chains[0]->getHowToRedeem());
+        };
+
+        // First request should hit the API
+        $mockGuzzleClientFactory = new MockGuzzleClientFactory(
+            new MockHandler([
+                new Response(200, [], json_encode([
+                    'data' => [
+                        [
+                            'id' => 'idValue0',
+                            'name' => 'nameValue0',
+                            'maximum_number_of_tickets' => 100,
+                            'introduction_instructions' => 'introValue0',
+                            'how_to_redeem' => 'howToRedeemValue0',
+                        ],
+                    ],
+                ]))
+            ])
+        );
+
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithActiveUserToken(),
+            $mockGuzzleClientFactory,
+            $mockCache
+        );
+
+        $chains = $di->getChainsProvider()->getChains();
+        $testExpectations($chains);
+
+        // Second request should not hit the API but fetch from cache
+        $mockGuzzleClientFactory = new MockGuzzleClientFactory(new MockHandler([]));
+
+        $di = MockGuzzleClientDi::buildMockDi(
+            MockSession::createWithActiveUserToken(),
+            $mockGuzzleClientFactory,
+            $mockCache
+        );
+
+        $chains = $di->getChainsProvider()->getChains();
+        $testExpectations($chains);
     }
 
     public function testItThrowsOnUnexpectedStatusCode()

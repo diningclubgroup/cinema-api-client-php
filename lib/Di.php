@@ -25,6 +25,10 @@ use DCG\Cinema\Api\User\UserFactory;
 use DCG\Cinema\Api\User\UserProvider;
 use DCG\Cinema\Api\UserToken\UserTokenFactory;
 use DCG\Cinema\Api\UserToken\UserTokenProvider;
+use DCG\Cinema\Cache\CacheInterface;
+use DCG\Cinema\Request\Cache\KeyGenerator;
+use DCG\Cinema\Request\Cache\LifetimeGenerator;
+use DCG\Cinema\Request\CachingClient;
 use DCG\Cinema\Request\Client;
 use DCG\Cinema\Request\GuzzleClientFactory;
 use DCG\Cinema\Request\GuzzleClientFactoryInterface;
@@ -50,25 +54,52 @@ class Di
     private $userProvider;
     private $userTokenProvider;
 
+    /**
+     * @param SessionInterface $session
+     * @param CacheInterface $cache
+     * @param string $apiHost
+     * @param string $apiClientToken
+     * @param int $requestCacheLifetimeMinSeconds
+     * @param int $requestCacheLifetimeMaxSeconds
+     * @return Di
+     */
     public static function build(
         SessionInterface $session,
+        CacheInterface $cache,
         $apiHost,
-        $apiClientToken
+        $apiClientToken,
+        $requestCacheLifetimeMinSeconds,
+        $requestCacheLifetimeMaxSeconds
     ) {
         if (self::$singleton === null) {
             $guzzleClientFactory = new GuzzleClientFactory($apiHost, $apiClientToken);
-            self::$singleton = new Di($session, $guzzleClientFactory);
+            self::$singleton = new Di(
+                $session,
+                $cache,
+                $guzzleClientFactory,
+                $requestCacheLifetimeMinSeconds,
+                $requestCacheLifetimeMaxSeconds
+            );
         }
         return self::$singleton;
     }
 
     protected function __construct(
         SessionInterface $session,
-        GuzzleClientFactoryInterface $guzzleClientFactory
+        CacheInterface $cache,
+        GuzzleClientFactoryInterface $guzzleClientFactory,
+        $requestCacheLifetimeMinSeconds,
+        $requestCacheLifetimeMaxSeconds
     ) {
         $activeUserTokenProvider = new ActiveUserTokenProvider($session);
         $requestSender = new RequestSender();
         $client = new Client($guzzleClientFactory, $activeUserTokenProvider, $requestSender);
+        $cachingClient = new CachingClient(
+            $client,
+            $cache,
+            new KeyGenerator(),
+            new LifetimeGenerator($requestCacheLifetimeMinSeconds, $requestCacheLifetimeMaxSeconds)
+        );
 
         $clientResponseDataFieldValidator = new ClientResponseDataFieldValidator();
 
@@ -85,17 +116,19 @@ class Di
 
         $this->activeUserTokenPersister = new ActiveUserTokenPersister($session);
         $this->activeUserTokenProvider = $activeUserTokenProvider;
-        $this->chainsProvider = new ChainsProvider($client, $chainFactory);
-        $this->cinemasProvider = new CinemasProvider($client, $cinemaFactory);
         $this->orderCompleter = new OrderCompleter($client, $orderCompletionResponseFactory);
         $this->orderCreator = new OrderCreator($client, $orderCreationResponseFactory);
         $this->orderProvider = new OrderProvider($client, $orderFactory);
         $this->ordersProvider = new OrdersProvider($client, $orderFactory);
-        $this->termsConditionsProvider = new TermsConditionsProvider($client, $termsConditionsFactory);
-        $this->ticketTypesProvider = new TicketTypesProvider($client, $ticketTypeFactory);
         $this->userCreator = new UserCreator($client, $userFactory);
         $this->userProvider = new UserProvider($client, $userFactory);
         $this->userTokenProvider = new UserTokenProvider($client, $userTokenFactory);
+
+        // Caching providers
+        $this->chainsProvider = new ChainsProvider($cachingClient, $chainFactory);
+        $this->cinemasProvider = new CinemasProvider($cachingClient, $cinemaFactory);
+        $this->termsConditionsProvider = new TermsConditionsProvider($cachingClient, $termsConditionsFactory);
+        $this->ticketTypesProvider = new TicketTypesProvider($cachingClient, $ticketTypeFactory);
     }
 
     /**
