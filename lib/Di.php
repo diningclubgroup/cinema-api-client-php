@@ -28,10 +28,11 @@ use DCG\Cinema\Api\UserToken\UserTokenProvider;
 use DCG\Cinema\Cache\CacheInterface;
 use DCG\Cinema\Request\Cache\KeyGenerator;
 use DCG\Cinema\Request\Cache\LifetimeGenerator;
-use DCG\Cinema\Request\CachingClient;
-use DCG\Cinema\Request\Client;
-use DCG\Cinema\Request\GuzzleClientFactory;
-use DCG\Cinema\Request\GuzzleClientFactoryInterface;
+use DCG\Cinema\Request\Client\AuthenticatedClient;
+use DCG\Cinema\Request\Client\CachingClient;
+use DCG\Cinema\Request\Client\UnauthenticatedClient;
+use DCG\Cinema\Request\Guzzle\GuzzleClientFactory;
+use DCG\Cinema\Request\Guzzle\GuzzleClientFactoryInterface;
 use DCG\Cinema\Request\RequestSender;
 use DCG\Cinema\Validator\ClientResponseDataFieldValidator;
 use DCG\Cinema\Session\SessionInterface;
@@ -93,9 +94,10 @@ class Di
     ) {
         $activeUserTokenProvider = new ActiveUserTokenProvider($session);
         $requestSender = new RequestSender();
-        $client = new Client($guzzleClientFactory, $activeUserTokenProvider, $requestSender);
-        $cachingClient = new CachingClient(
-            $client,
+        $authenticatedClient = new AuthenticatedClient($guzzleClientFactory, $activeUserTokenProvider, $requestSender);
+        $unauthenticatedClient = new UnauthenticatedClient($guzzleClientFactory, $requestSender);
+        $cachingAuthenticatedClient = new CachingClient(
+            $authenticatedClient,
             $cache,
             new KeyGenerator(),
             new LifetimeGenerator($requestCacheLifetimeMinSeconds, $requestCacheLifetimeMaxSeconds)
@@ -116,19 +118,26 @@ class Di
 
         $this->activeUserTokenPersister = new ActiveUserTokenPersister($session);
         $this->activeUserTokenProvider = $activeUserTokenProvider;
-        $this->orderCompleter = new OrderCompleter($client, $orderCompletionResponseFactory);
-        $this->orderCreator = new OrderCreator($client, $orderCreationResponseFactory);
-        $this->orderProvider = new OrderProvider($client, $orderFactory);
-        $this->ordersProvider = new OrdersProvider($client, $orderFactory);
-        $this->userCreator = new UserCreator($client, $userFactory);
-        $this->userProvider = new UserProvider($client, $userFactory);
-        $this->userTokenProvider = new UserTokenProvider($client, $userTokenFactory);
 
-        // Caching providers
-        $this->chainsProvider = new ChainsProvider($cachingClient, $chainFactory);
-        $this->cinemasProvider = new CinemasProvider($cachingClient, $cinemaFactory);
-        $this->termsConditionsProvider = new TermsConditionsProvider($cachingClient, $termsConditionsFactory);
-        $this->ticketTypesProvider = new TicketTypesProvider($cachingClient, $ticketTypeFactory);
+        // Authenticated
+        $this->orderCompleter = new OrderCompleter($authenticatedClient, $orderCompletionResponseFactory);
+        $this->orderCreator = new OrderCreator($authenticatedClient, $orderCreationResponseFactory);
+        $this->orderProvider = new OrderProvider($authenticatedClient, $orderFactory);
+        $this->ordersProvider = new OrdersProvider($authenticatedClient, $orderFactory);
+
+        // Unauthenticated
+        $this->userCreator = new UserCreator($unauthenticatedClient, $userFactory);
+        $this->userProvider = new UserProvider($unauthenticatedClient, $userFactory);
+        $this->userTokenProvider = new UserTokenProvider($unauthenticatedClient, $userTokenFactory);
+
+        // Authenticated and cached
+        $this->chainsProvider = new ChainsProvider($cachingAuthenticatedClient, $chainFactory);
+        $this->cinemasProvider = new CinemasProvider($cachingAuthenticatedClient, $cinemaFactory);
+        $this->termsConditionsProvider = new TermsConditionsProvider(
+            $cachingAuthenticatedClient,
+            $termsConditionsFactory
+        );
+        $this->ticketTypesProvider = new TicketTypesProvider($cachingAuthenticatedClient, $ticketTypeFactory);
     }
 
     /**

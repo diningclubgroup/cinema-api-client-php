@@ -2,7 +2,7 @@
 
 namespace DCG\Cinema\Api\Cinema;
 
-use DCG\Cinema\Request\ClientInterface;
+use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\Cinema;
 
 class CinemasProvider

@@ -1,10 +1,11 @@
 <?php
 
-namespace DCG\Cinema\Request;
+namespace DCG\Cinema\Request\Client;
 
 use DCG\Cinema\Exception\UnexpectedResponseContentException;
 use DCG\Cinema\Exception\UnexpectedStatusCodeException;
 use DCG\Cinema\Exception\UserNotAuthenticatedException;
+use DCG\Cinema\Request\ClientResponse;
 
 interface ClientInterface
 {
@@ -43,26 +44,4 @@ interface ClientInterface
      * @throws \Exception
      */
     public function patch($path, $body = null, $successStatusCodes = [200]);
-
-    /**
-     * @param string $path
-     * @param array $queryParams
-     * @param int[] $successStatusCodes
-     * @return ClientResponse
-     * @throws UnexpectedStatusCodeException
-     * @throws UnexpectedResponseContentException
-     * @throws \Exception
-     */
-    public function getUnauthenticated($path, $queryParams = [], $successStatusCodes = [200]);
-
-    /**
-     * @param string $path
-     * @param string|null $body
-     * @param int[] $successStatusCodes
-     * @return ClientResponse
-     * @throws UnexpectedStatusCodeException
-     * @throws UnexpectedResponseContentException
-     * @throws \Exception
-     */
-    public function postUnauthenticated($path, $body = null, $successStatusCodes = [201]);
 }

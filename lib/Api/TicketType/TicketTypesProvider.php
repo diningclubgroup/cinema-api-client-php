@@ -2,7 +2,7 @@
 
 namespace DCG\Cinema\Api\TicketType;
 
-use DCG\Cinema\Request\ClientInterface;
+use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\TicketType;
 
 class TicketTypesProvider

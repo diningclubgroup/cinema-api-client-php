@@ -3,7 +3,7 @@
 namespace DCG\Cinema\Tests\Functional\Mocks;
 
 use DCG\Cinema\Model\UserToken;
-use DCG\Cinema\Request\GuzzleClientFactoryInterface;
+use DCG\Cinema\Request\Guzzle\GuzzleClientFactoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Handler\MockHandler;

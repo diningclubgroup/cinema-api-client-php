@@ -2,7 +2,7 @@
 
 namespace DCG\Cinema\Api\TermsConditions;
 
-use DCG\Cinema\Request\ClientInterface;
+use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\TermsConditions;
 
 class TermsConditionsProvider

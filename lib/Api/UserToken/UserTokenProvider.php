@@ -2,7 +2,7 @@
 
 namespace DCG\Cinema\Api\UserToken;
 
-use DCG\Cinema\Request\ClientInterface;
+use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\UserToken;
 
 class UserTokenProvider
@@ -27,7 +27,7 @@ class UserTokenProvider
      */
     public function getToken($userId)
     {
-        $clientResponse = $this->client->postUnauthenticated("users/{$userId}/tokens");
+        $clientResponse = $this->client->post("users/{$userId}/tokens");
         return $this->userTokenFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

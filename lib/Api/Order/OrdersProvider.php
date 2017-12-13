@@ -2,7 +2,7 @@
 
 namespace DCG\Cinema\Api\Order;
 
-use DCG\Cinema\Request\ClientInterface;
+use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\Order;
 
 class OrdersProvider

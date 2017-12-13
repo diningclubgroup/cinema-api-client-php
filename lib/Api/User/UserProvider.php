@@ -2,7 +2,7 @@
 
 namespace DCG\Cinema\Api\User;
 
-use DCG\Cinema\Request\ClientInterface;
+use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\User;
 
 class UserProvider
@@ -25,7 +25,7 @@ class UserProvider
      */
     public function getUserByEmail($email)
     {
-        $clientResponse = $this->client->getUnauthenticated('users', ['email' => $email]);
+        $clientResponse = $this->client->get('users', ['email' => $email]);
 
         if (!isset($clientResponse->getData()[0])) {
             throw new \RuntimeException('User not found');

@@ -2,7 +2,7 @@
 
 namespace DCG\Cinema\Api\User;
 
-use DCG\Cinema\Request\ClientInterface;
+use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\User;
 
 class UserCreator
@@ -25,7 +25,7 @@ class UserCreator
      */
     public function createUser($data)
     {
-        $clientResponse = $this->client->postUnauthenticated('users', json_encode($data));
+        $clientResponse = $this->client->post('users', json_encode($data));
         return $this->userFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace DCG\Cinema\Request;
+namespace DCG\Cinema\Request\Guzzle;
 
 use DCG\Cinema\Model\UserToken;
 use GuzzleHttp\Client as GuzzleClient;
