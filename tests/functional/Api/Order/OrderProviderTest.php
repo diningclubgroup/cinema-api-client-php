@@ -97,6 +97,7 @@ class OrderProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getOrderProvider()->getOrder('orderId');
     }

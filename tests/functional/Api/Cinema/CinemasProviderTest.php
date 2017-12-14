@@ -118,6 +118,7 @@ class CinemasProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getCinemasProvider()->getCinemas('chainId');
     }

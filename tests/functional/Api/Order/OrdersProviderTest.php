@@ -121,6 +121,7 @@ class OrdersProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getOrdersProvider()->getOrders('cinemaUuid');
     }

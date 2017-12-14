@@ -61,6 +61,7 @@ class OrderCompleterTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getOrderCompleter()->completeOrder('transactionId', []);
     }

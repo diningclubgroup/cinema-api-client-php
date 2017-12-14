@@ -84,6 +84,7 @@ class TermsConditionsProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getTermsConditionsProvider()->getTermsConditions();
     }

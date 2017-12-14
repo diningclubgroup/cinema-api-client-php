@@ -71,6 +71,7 @@ class UserProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getUserProvider()->getUserByEmail('emailValue');
     }

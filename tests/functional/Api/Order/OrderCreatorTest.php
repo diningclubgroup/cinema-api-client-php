@@ -54,6 +54,7 @@ class OrderCreatorTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(200);
 
         $di->getOrderCreator()->createOrder([]);
     }

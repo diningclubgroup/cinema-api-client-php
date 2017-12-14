@@ -55,6 +55,7 @@ class UserCreatorTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(200);
 
         $di->getUserCreator()->createUser([]);
     }

@@ -156,6 +156,7 @@ class TicketTypesProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getTicketTypesProvider()->getTicketTypes('chainId');
     }

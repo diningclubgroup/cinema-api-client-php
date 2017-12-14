@@ -124,6 +124,7 @@ class ChainsProviderTest extends TestCase
         );
 
         $this->expectException(UnexpectedStatusCodeException::class);
+        $this->expectExceptionCode(201);
 
         $di->getChainsProvider()->getChains();
     }

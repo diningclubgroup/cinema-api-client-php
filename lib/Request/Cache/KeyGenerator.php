@@ -31,6 +31,6 @@ class KeyGenerator
             implode(':', $successStatusCodes),
         ];
 
-        return self::CACHE_PREFIX . sha1(implode('|', $hashSegments));
+        return self::CACHE_PREFIX . hash('sha3-512', (implode('|', $hashSegments)));
     }
 }
