@@ -18,7 +18,14 @@ class RequestSender
      * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function sendRequest($guzzleClient, $type, $path, $queryParams, $body, $successStatusCodes)
+    public function sendRequest(
+        GuzzleClientInterface $guzzleClient,
+        string $type,
+        string $path,
+        array $queryParams,
+        string $body = null,
+        array $successStatusCodes
+    ): ClientResponse
     {
         $options = [];
         if ($body !== null) {
@@ -36,7 +43,7 @@ class RequestSender
             throw new UnexpectedStatusCodeException($response->getStatusCode());
         }
 
-        $content = json_decode((string) $response->getBody(), true);
+        $content = json_decode((string)$response->getBody(), true);
 
         return new ClientResponse(
             isset($content['meta']) ? $content['meta'] : [],

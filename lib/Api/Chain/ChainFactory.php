@@ -20,7 +20,7 @@ class ChainFactory
      * @return Chain
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData(array $data)
+    public function createFromClientResponseData(array $data): Chain
     {
         if (!$this->fieldValidator->validate($data, array(
             'id',

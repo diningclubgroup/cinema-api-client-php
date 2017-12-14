@@ -11,10 +11,10 @@ interface GuzzleClientFactoryInterface
      * @param UserToken $userToken
      * @return GuzzleClientInterface
      */
-    public function create($userToken);
+    public function create(UserToken $userToken): GuzzleClientInterface;
 
     /**
      * @return GuzzleClientInterface
      */
-    public function createUnauthenticated();
+    public function createUnauthenticated(): GuzzleClientInterface;
 }

@@ -7,7 +7,12 @@ class LifetimeGenerator
     private $minLifetimeSeconds;
     private $maxLifetimeSeconds;
 
-    public function __construct($minLifetimeSeconds, $maxLifetimeSeconds)
+    /**
+     * @param int $minLifetimeSeconds
+     * @param int $maxLifetimeSeconds
+     * @throws \RuntimeException
+     */
+    public function __construct(int $minLifetimeSeconds, int $maxLifetimeSeconds)
     {
         if ($minLifetimeSeconds > $maxLifetimeSeconds) {
             throw new \RuntimeException('Invalid cache lifetime configuration');
@@ -22,7 +27,7 @@ class LifetimeGenerator
      *
      * @return int number of seconds between the min and max lifetime inclusive.
      */
-    public function generateLifetimeSeconds()
+    public function generateLifetimeSeconds(): int
     {
         return mt_rand($this->minLifetimeSeconds, $this->maxLifetimeSeconds);
     }

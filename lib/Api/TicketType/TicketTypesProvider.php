@@ -19,11 +19,11 @@ class TicketTypesProvider
     }
 
     /**
-     * @param int $chainId
+     * @param string $chainId
      * @return TicketType[]
      * @throws \Exception
      */
-    public function getTicketTypes($chainId)
+    public function getTicketTypes(string $chainId): array
     {
         $clientResponse = $this->client->get("chains/{$chainId}/ticket-types");
 

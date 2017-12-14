@@ -17,7 +17,7 @@ class ActiveUserTokenProvider
     /**
      * @return UserToken|null
      */
-    public function getUserToken()
+    public function getUserToken(): ?UserToken
     {
         $cinemaUserToken = $this->session->get(ActiveUserToken::SESSION_KEY_NAME);
 

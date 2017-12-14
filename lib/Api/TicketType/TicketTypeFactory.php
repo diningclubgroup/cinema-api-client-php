@@ -20,7 +20,7 @@ class TicketTypeFactory
      * @return TicketType
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData(array $data)
+    public function createFromClientResponseData(array $data): TicketType
     {
         if (!$this->fieldValidator->validate($data, array(
             'id',

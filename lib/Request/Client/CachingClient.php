@@ -5,6 +5,7 @@ namespace DCG\Cinema\Request\Client;
 use DCG\Cinema\Cache\CacheInterface;
 use DCG\Cinema\Request\Cache\KeyGenerator;
 use DCG\Cinema\Request\Cache\LifetimeGenerator;
+use DCG\Cinema\Request\ClientResponse;
 
 class CachingClient implements ClientInterface
 {
@@ -30,7 +31,7 @@ class CachingClient implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function get($path, $queryParams = [], $successStatusCodes = [200])
+    public function get(string $path, array $queryParams = [], array $successStatusCodes = [200]): ClientResponse
     {
         $cacheKey = $this->keyGenerator->generateKey('get', $path, $queryParams, $successStatusCodes);
         $result = $this->cache->get($cacheKey);
@@ -46,7 +47,7 @@ class CachingClient implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function post($path, $body = null, $successStatusCodes = [201])
+    public function post(string $path, string $body = null, array $successStatusCodes = [201]): ClientResponse
     {
         return $this->client->post($path, $body, $successStatusCodes);
     }
@@ -54,7 +55,7 @@ class CachingClient implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function patch($path, $body = null, $successStatusCodes = [200])
+    public function patch(string $path, string $body = null, array $successStatusCodes = [200]): ClientResponse
     {
         return $this->client->patch($path, $body, $successStatusCodes);
     }

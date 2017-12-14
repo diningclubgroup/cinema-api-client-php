@@ -22,7 +22,7 @@ class ChainsProvider
      * @return Chain[]
      * @throws \Exception
      */
-    public function getChains()
+    public function getChains(): array
     {
         $clientResponse = $this->client->get('chains');
 

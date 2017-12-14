@@ -24,7 +24,7 @@ class OrderCompleter
      * @return OrderCompletionResponse
      * @throws \Exception
      */
-    public function completeOrder($transactionId, $data = null)
+    public function completeOrder(string $transactionId, array $data = null): OrderCompletionResponse
     {
         $body = $data === null ? null : json_encode($data);
         $clientResponse = $this->client->patch("transactions/{$transactionId}", $body);

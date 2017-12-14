@@ -9,7 +9,7 @@ class ClientResponseDataFieldValidator
      * @param string[] $expectedDataFields
      * @return bool
      */
-    public function validate(array $data, array $expectedDataFields)
+    public function validate(array $data, array $expectedDataFields): bool
     {
         foreach ($expectedDataFields as $expectedField) {
             if (!array_key_exists($expectedField, $data)) {

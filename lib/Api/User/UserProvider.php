@@ -23,7 +23,7 @@ class UserProvider
      * @return User
      * @throws \Exception
      */
-    public function getUserByEmail($email)
+    public function getUserByEmail(string $email): User
     {
         $clientResponse = $this->client->get('users', ['email' => $email]);
 

@@ -20,7 +20,7 @@ class UserFactory
      * @return User
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData(array $data)
+    public function createFromClientResponseData(array $data): User
     {
         if (!$this->fieldValidator->validate($data, array(
             'id',

@@ -11,7 +11,7 @@ class ClientResponse
      * @param array $meta
      * @param array $data
      */
-    public function __construct($meta, $data)
+    public function __construct(array $meta, array $data)
     {
         $this->meta = $meta;
         $this->data = $data;
@@ -20,7 +20,7 @@ class ClientResponse
     /**
      * @return array
      */
-    public function getMeta()
+    public function getMeta(): array
     {
         return $this->meta;
     }
@@ -28,7 +28,7 @@ class ClientResponse
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }

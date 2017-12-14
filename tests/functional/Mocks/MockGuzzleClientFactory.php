@@ -34,7 +34,7 @@ class MockGuzzleClientFactory implements GuzzleClientFactoryInterface
      * @param UserToken $userToken
      * @return GuzzleClientInterface
      */
-    public function create($userToken)
+    public function create(UserToken $userToken): GuzzleClientInterface
     {
         return $this->client;
     }
@@ -42,7 +42,7 @@ class MockGuzzleClientFactory implements GuzzleClientFactoryInterface
     /**
      * @return GuzzleClientInterface
      */
-    public function createUnauthenticated()
+    public function createUnauthenticated(): GuzzleClientInterface
     {
         return $this->client;
     }
@@ -50,7 +50,7 @@ class MockGuzzleClientFactory implements GuzzleClientFactoryInterface
     /**
      * @return array the request history.
      */
-    public function getHistory()
+    public function getHistory(): array
     {
         return $this->history;
     }

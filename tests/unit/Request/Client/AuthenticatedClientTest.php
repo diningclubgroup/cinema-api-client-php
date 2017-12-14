@@ -4,6 +4,7 @@ namespace DCG\Cinema\Tests\Unit\Request\Client;
 
 use DCG\Cinema\ActiveUserToken\ActiveUserTokenProvider;
 use DCG\Cinema\Exception\UserNotAuthenticatedException;
+use DCG\Cinema\Model\UserToken;
 use DCG\Cinema\Request\Client\AuthenticatedClient;
 use DCG\Cinema\Request\ClientResponse;
 use DCG\Cinema\Request\Guzzle\GuzzleClientFactoryInterface;
@@ -22,14 +23,15 @@ class AuthenticatedClientTest extends MockeryTestCase
     public function testGetSuccess()
     {
         $clientResponse = new ClientResponse(['metaKey' => 'metaValue'], ['dataKey' => 'dataValue']);
+        $userToken = new UserToken('userToken', 0);
 
         $guzzleClientMock = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
         $guzzleClientFactoryMock = Mockery::mock(GuzzleClientFactoryInterface::class);
-        $guzzleClientFactoryMock->shouldReceive('create')->with('userTokenValue')->andReturn($guzzleClientMock)->once();
+        $guzzleClientFactoryMock->shouldReceive('create')->with($userToken)->andReturn($guzzleClientMock)->once();
 
         $activeUserTokenProviderMock = Mockery::mock(ActiveUserTokenProvider::class);
-        $activeUserTokenProviderMock->shouldReceive('getUserToken')->andReturn('userTokenValue')->atLeast()->once();
+        $activeUserTokenProviderMock->shouldReceive('getUserToken')->andReturn($userToken)->atLeast()->once();
 
         $requestSenderMock = Mockery::mock(RequestSender::class);
         $requestSenderMock
@@ -64,14 +66,15 @@ class AuthenticatedClientTest extends MockeryTestCase
     public function testPostSuccess()
     {
         $clientResponse = new ClientResponse(['metaKey' => 'metaValue'], ['dataKey' => 'dataValue']);
+        $userToken = new UserToken('userToken', 0);
 
         $guzzleClientMock = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
         $guzzleClientFactoryMock = Mockery::mock(GuzzleClientFactoryInterface::class);
-        $guzzleClientFactoryMock->shouldReceive('create')->with('userTokenValue')->andReturn($guzzleClientMock)->once();
+        $guzzleClientFactoryMock->shouldReceive('create')->with($userToken)->andReturn($guzzleClientMock)->once();
 
         $activeUserTokenProviderMock = Mockery::mock(ActiveUserTokenProvider::class);
-        $activeUserTokenProviderMock->shouldReceive('getUserToken')->andReturn('userTokenValue')->atLeast()->once();
+        $activeUserTokenProviderMock->shouldReceive('getUserToken')->andReturn($userToken)->atLeast()->once();
 
         $requestSenderMock = Mockery::mock(RequestSender::class);
         $requestSenderMock
@@ -106,14 +109,15 @@ class AuthenticatedClientTest extends MockeryTestCase
     public function testPatchSuccess()
     {
         $clientResponse = new ClientResponse(['metaKey' => 'metaValue'], ['dataKey' => 'dataValue']);
+        $userToken = new UserToken('userToken', 0);
 
         $guzzleClientMock = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
         $guzzleClientFactoryMock = Mockery::mock(GuzzleClientFactoryInterface::class);
-        $guzzleClientFactoryMock->shouldReceive('create')->with('userTokenValue')->andReturn($guzzleClientMock)->once();
+        $guzzleClientFactoryMock->shouldReceive('create')->with($userToken)->andReturn($guzzleClientMock)->once();
 
         $activeUserTokenProviderMock = Mockery::mock(ActiveUserTokenProvider::class);
-        $activeUserTokenProviderMock->shouldReceive('getUserToken')->andReturn('userTokenValue')->atLeast()->once();
+        $activeUserTokenProviderMock->shouldReceive('getUserToken')->andReturn($userToken)->atLeast()->once();
 
         $requestSenderMock = Mockery::mock(RequestSender::class);
         $requestSenderMock

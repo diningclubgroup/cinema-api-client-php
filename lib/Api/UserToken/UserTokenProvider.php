@@ -25,7 +25,7 @@ class UserTokenProvider
      * @return UserToken
      * @throws \Exception
      */
-    public function getToken($userId)
+    public function getToken(string $userId): UserToken
     {
         $clientResponse = $this->client->post("users/{$userId}/tokens");
         return $this->userTokenFactory->createFromClientResponseData($clientResponse->getData());

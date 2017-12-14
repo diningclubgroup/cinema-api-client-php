@@ -6,27 +6,17 @@ use Throwable;
 
 class UnexpectedStatusCodeException extends \RuntimeException
 {
-    private $statusCode;
-
     /**
-     * @param int $statusCode
-     * @param string|null $message
      * @param int $code
+     * @param string|null $message
      * @param Throwable|null $previous
      */
-    public function __construct($statusCode, $message = null, $code = 0, $previous = null)
+    public function __construct(int $code, string $message = null, \Throwable $previous = null)
     {
-        $this->statusCode = $statusCode;
-
         if ($message === null) {
-            $message = "Unexpected response status code: {$statusCode}";
+            $message = "Unexpected response status code: {$code}";
         }
 
         parent::__construct($message, $code, $previous);
-    }
-
-    public function getStatusCode()
-    {
-        return $this->statusCode;
     }
 }

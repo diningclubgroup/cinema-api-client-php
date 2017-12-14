@@ -20,7 +20,7 @@ class CinemaFactory
      * @return Cinema
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData($data)
+    public function createFromClientResponseData(array $data): Cinema
     {
         if (!$this->fieldValidator->validate($data, array(
             'id',

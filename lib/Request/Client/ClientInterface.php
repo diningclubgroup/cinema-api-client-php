@@ -19,7 +19,7 @@ interface ClientInterface
      * @throws UnexpectedResponseContentException
      * @throws \Exception
      */
-    public function get($path, $queryParams = [], $successStatusCodes = [200]);
+    public function get(string $path, array $queryParams = [], array $successStatusCodes = [200]): ClientResponse;
 
     /**
      * @param string $path
@@ -31,7 +31,7 @@ interface ClientInterface
      * @throws UnexpectedResponseContentException
      * @throws \Exception
      */
-    public function post($path, $body = null, $successStatusCodes = [201]);
+    public function post(string $path, string $body = null, array $successStatusCodes = [201]): ClientResponse;
 
     /**
      * @param string $path
@@ -43,5 +43,5 @@ interface ClientInterface
      * @throws UnexpectedResponseContentException
      * @throws \Exception
      */
-    public function patch($path, $body = null, $successStatusCodes = [200]);
+    public function patch(string $path, string $body = null, array $successStatusCodes = [200]): ClientResponse;
 }

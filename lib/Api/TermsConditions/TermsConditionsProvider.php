@@ -22,7 +22,7 @@ class TermsConditionsProvider
      * @return TermsConditions
      * @throws \Exception
      */
-    public function getTermsConditions()
+    public function getTermsConditions(): TermsConditions
     {
         $clientResponse = $this->client->get('terms-and-conditions');
         return $this->termsConditionsFactory->createFromClientResponseData($clientResponse->getData());

@@ -19,11 +19,11 @@ class CinemasProvider
     }
 
     /**
-     * @param int $chainId
+     * @param string $chainId
      * @return Cinema[]
      * @throws \Exception
      */
-    public function getCinemas($chainId)
+    public function getCinemas(string $chainId): array
     {
         $clientResponse = $this->client->get("chains/{$chainId}/cinemas");
 

@@ -24,7 +24,7 @@ class OrderFactory
      * @return Order
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData(array $data)
+    public function createFromClientResponseData(array $data): Order
     {
         if (!$this->fieldValidator->validate($data, array(
             'id',

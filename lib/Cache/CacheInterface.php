@@ -11,7 +11,7 @@ interface CacheInterface
      * @param string $key
      * @return mixed
      */
-    public function get($key);
+    public function get(string $key);
 
     /**
      * Sets the specified value in the cache using the specified key.
@@ -20,5 +20,5 @@ interface CacheInterface
      * @param mixed $value
      * @param int $lifetimeSeconds
      */
-    public function set($key, $value, $lifetimeSeconds);
+    public function set(string $key, $value, int $lifetimeSeconds): void;
 }

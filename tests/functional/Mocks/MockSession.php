@@ -16,7 +16,7 @@ class MockSession implements SessionInterface
      * @param array $items optional key-value pairs to represent the initial cache content.
      * @return MockSession
      */
-    public static function createWithActiveUserToken(array $items = [])
+    public static function createWithActiveUserToken(array $items = []): MockSession
     {
         return new MockSession(
             new UserToken(self::USER_TOKEN_VALUE, time() + 20),
@@ -28,7 +28,7 @@ class MockSession implements SessionInterface
      * @param array $items optional key-value pairs to represent the initial cache content.
      * @return MockSession
      */
-    public static function createWithInactiveUserToken(array $items = [])
+    public static function createWithInactiveUserToken(array $items = []): MockSession
     {
         return new MockSession(
             new UserToken(self::USER_TOKEN_VALUE, time() - 20),
@@ -40,7 +40,7 @@ class MockSession implements SessionInterface
      * @param array $items optional key-value pairs to represent the initial cache content.
      * @return MockSession
      */
-    public static function createWithNoUserToken(array $items = [])
+    public static function createWithNoUserToken(array $items = []): MockSession
     {
         return new MockSession(null, $items);
     }
@@ -66,7 +66,7 @@ class MockSession implements SessionInterface
      * @param string $key
      * @return mixed
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (array_key_exists($key, $this->items)) {
             return $this->items[$key];
@@ -80,7 +80,7 @@ class MockSession implements SessionInterface
      * @param string $key
      * @param mixed $value
      */
-    public function set($key, $value)
+    public function set(string $key, $value): void
     {
         $this->items[$key] = $value;
     }

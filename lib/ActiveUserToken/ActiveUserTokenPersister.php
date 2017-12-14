@@ -17,7 +17,7 @@ class ActiveUserTokenPersister
     /**
      * @param UserToken $userToken
      */
-    public function persistUserToken(UserToken $userToken)
+    public function persistUserToken(UserToken $userToken): void
     {
         $this->session->set(ActiveUserToken::SESSION_KEY_NAME, $userToken);
     }

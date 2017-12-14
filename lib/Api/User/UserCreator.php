@@ -23,7 +23,7 @@ class UserCreator
      * @return User
      * @throws \Exception
      */
-    public function createUser($data)
+    public function createUser(array $data): User
     {
         $clientResponse = $this->client->post('users', json_encode($data));
         return $this->userFactory->createFromClientResponseData($clientResponse->getData());

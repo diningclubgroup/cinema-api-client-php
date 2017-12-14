@@ -15,7 +15,7 @@ class GuzzleClientFactory implements GuzzleClientFactoryInterface
      * @param string $host the base URL of the target API.
      * @param string $clientToken
      */
-    public function __construct($host, $clientToken)
+    public function __construct(string $host, string $clientToken)
     {
         $this->host = $host;
         $this->clientToken = $clientToken;
@@ -25,7 +25,7 @@ class GuzzleClientFactory implements GuzzleClientFactoryInterface
      * @param UserToken $userToken
      * @return GuzzleClientInterface
      */
-    public function create($userToken)
+    public function create(UserToken $userToken): GuzzleClientInterface
     {
         $headers = $this->getCommonHeaders();
         $headers['User-Token'] = $userToken->getToken();
@@ -35,12 +35,12 @@ class GuzzleClientFactory implements GuzzleClientFactoryInterface
     /**
      * @return GuzzleClientInterface
      */
-    public function createUnauthenticated()
+    public function createUnauthenticated(): GuzzleClientInterface
     {
         return $this->createWithHeaders($this->getCommonHeaders());
     }
 
-    private function createWithHeaders($headers)
+    private function createWithHeaders(array $headers): GuzzleClientInterface
     {
         // Ensure there's always a trailing slash to prevent Guzzle from ignoring any path component
         $baseUri = rtrim($this->host, '/') . '/';
@@ -52,7 +52,7 @@ class GuzzleClientFactory implements GuzzleClientFactoryInterface
         ]);
     }
 
-    private function getCommonHeaders()
+    private function getCommonHeaders(): array
     {
         return [
             'Client-Token' => $this->clientToken,

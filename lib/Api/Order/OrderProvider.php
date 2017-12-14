@@ -23,7 +23,7 @@ class OrderProvider
      * @return Order
      * @throws \Exception
      */
-    public function getOrder($orderId)
+    public function getOrder(string $orderId): Order
     {
         $clientResponse = $this->client->get("orders/{$orderId}");
         return $this->orderFactory->createFromClientResponseData($clientResponse->getData());

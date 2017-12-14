@@ -2,6 +2,7 @@
 
 namespace DCG\Cinema\Request\Client;
 
+use DCG\Cinema\Request\ClientResponse;
 use DCG\Cinema\Request\Guzzle\GuzzleClientFactoryInterface;
 use DCG\Cinema\Request\RequestSender;
 
@@ -21,7 +22,7 @@ class UnauthenticatedClient implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function get($path, $queryParams = [], $successStatusCodes = [200])
+    public function get(string $path, array $queryParams = [], array $successStatusCodes = [200]): ClientResponse
     {
         $guzzleClient = $this->guzzleClientFactory->createUnauthenticated();
         return $this->requestSender->sendRequest($guzzleClient, 'GET', $path, $queryParams, null, $successStatusCodes);
@@ -30,7 +31,7 @@ class UnauthenticatedClient implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function post($path, $body = null, $successStatusCodes = [201])
+    public function post(string $path, string $body = null, array $successStatusCodes = [201]): ClientResponse
     {
         $guzzleClient = $this->guzzleClientFactory->createUnauthenticated();
         return $this->requestSender->sendRequest($guzzleClient, 'POST', $path, [], $body, $successStatusCodes);
@@ -39,7 +40,7 @@ class UnauthenticatedClient implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function patch($path, $body = null, $successStatusCodes = [200])
+    public function patch(string $path, string $body = null, array $successStatusCodes = [200]): ClientResponse
     {
         $guzzleClient = $this->guzzleClientFactory->createUnauthenticated();
         return $this->requestSender->sendRequest($guzzleClient, 'PATCH', $path, [], $body, $successStatusCodes);

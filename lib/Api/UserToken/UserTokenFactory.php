@@ -20,7 +20,7 @@ class UserTokenFactory
      * @return UserToken
      * @throws UnexpectedResponseContentException
      */
-    public function createFromClientResponseData(array $data)
+    public function createFromClientResponseData(array $data): UserToken
     {
         if (!$this->fieldValidator->validate($data, array(
             'token',

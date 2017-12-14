@@ -23,7 +23,7 @@ class OrderCreator
      * @return OrderCreationResponse
      * @throws \Exception
      */
-    public function createOrder($data)
+    public function createOrder(array $data): OrderCreationResponse
     {
         $clientResponse = $this->client->post('orders', json_encode($data));
         return $this->orderCreationResponseFactory->createFromClientResponseData($clientResponse->getData());

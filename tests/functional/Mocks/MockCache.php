@@ -20,7 +20,7 @@ class MockCache implements CacheInterface
      * @param string $key
      * @return mixed
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (array_key_exists($key, $this->items)) {
             return $this->items[$key];
@@ -35,7 +35,7 @@ class MockCache implements CacheInterface
      * @param mixed $value
      * @param int $lifetimeSeconds
      */
-    public function set($key, $value, $lifetimeSeconds)
+    public function set(string $key, $value, int $lifetimeSeconds): void
     {
         $this->items[$key] = $value;
     }

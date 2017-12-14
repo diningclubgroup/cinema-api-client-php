@@ -7,13 +7,18 @@ class KeyGenerator
     const CACHE_PREFIX = 'cinema:request:';
 
     /**
-     * @param $functionName
-     * @param $path
-     * @param $queryParams
-     * @param $successStatusCodes
+     * @param string $functionName
+     * @param string $path
+     * @param array $queryParams
+     * @param array $successStatusCodes
      * @return string
      */
-    public function generateKey($functionName, $path, $queryParams, $successStatusCodes)
+    public function generateKey(
+        string $functionName,
+        string $path,
+        array $queryParams,
+        array $successStatusCodes
+    ): string
     {
         ksort($queryParams);
         sort($successStatusCodes);

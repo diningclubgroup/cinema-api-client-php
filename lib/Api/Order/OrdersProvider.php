@@ -23,7 +23,7 @@ class OrdersProvider
      * @return Order[]
      * @throws \Exception
      */
-    public function getOrders($cinemaUuid)
+    public function getOrders(string $cinemaUuid): array
     {
         $clientResponse = $this->client->get('orders', ['userId' => $cinemaUuid]);
 
