@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\TermsConditions;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\TermsConditions;
+use DCG\Cinema\Request\Client\GetterInterface;
 
 class TermsConditionsProvider
 {
-    private $client;
+    private $getter;
     private $termsConditionsFactory;
 
     public function __construct(
-        ClientInterface $client,
+        GetterInterface $getter,
         TermsConditionsFactory $termsConditionsFactory
     ) {
-        $this->client = $client;
+        $this->getter = $getter;
         $this->termsConditionsFactory = $termsConditionsFactory;
     }
 
@@ -24,7 +24,7 @@ class TermsConditionsProvider
      */
     public function getTermsConditions(): TermsConditions
     {
-        $clientResponse = $this->client->get('terms-and-conditions');
+        $clientResponse = $this->getter->get('terms-and-conditions');
         return $this->termsConditionsFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

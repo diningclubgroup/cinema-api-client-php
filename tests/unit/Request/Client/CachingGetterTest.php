@@ -5,13 +5,13 @@ namespace DCG\Cinema\Tests\Unit\Request\Client;
 use DCG\Cinema\Cache\CacheInterface;
 use DCG\Cinema\Request\Cache\KeyGenerator;
 use DCG\Cinema\Request\Cache\LifetimeGenerator;
-use DCG\Cinema\Request\Client\CachingClient;
-use DCG\Cinema\Request\Client\ClientInterface;
+use DCG\Cinema\Request\Client\CachingGetter;
+use DCG\Cinema\Request\Client\GetterInterface;
 use DCG\Cinema\Request\ClientResponse;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class CachingClientTest extends MockeryTestCase
+class CachingGetterTest extends MockeryTestCase
 {
     public function tearDown()
     {
@@ -26,7 +26,7 @@ class CachingClientTest extends MockeryTestCase
             ['dataKey' => 'dataValue']
         );
 
-        $clientMock = Mockery::mock(ClientInterface::class);
+        $getterMock = Mockery::mock(GetterInterface::class);
 
         $keyGeneratorMock = Mockery::mock(KeyGenerator::class);
         $keyGeneratorMock
@@ -41,7 +41,7 @@ class CachingClientTest extends MockeryTestCase
         $cacheMock = Mockery::mock(CacheInterface::class);
         $cacheMock->shouldReceive('get')->with('keyValue')->andReturn($clientResponse)->once();
 
-        $cachingClient = new CachingClient($clientMock, $cacheMock, $keyGeneratorMock, $lifetimeGeneratorMock);
+        $cachingClient = new CachingGetter($getterMock, $cacheMock, $keyGeneratorMock, $lifetimeGeneratorMock);
         $result = $cachingClient->get('pathValue', ['k' => 'v'], [200, 201]);
 
         $this->assertEquals($clientResponse, $result);
@@ -54,8 +54,8 @@ class CachingClientTest extends MockeryTestCase
             ['dataKey' => 'dataValue']
         );
 
-        $clientMock = Mockery::mock(ClientInterface::class);
-        $clientMock
+        $getterMock = Mockery::mock(GetterInterface::class);
+        $getterMock
             ->shouldReceive('get')
             ->with('pathValue', ['k' => 'v'], [200, 201])
             ->andReturn($clientResponse)
@@ -76,56 +76,8 @@ class CachingClientTest extends MockeryTestCase
         $cacheMock->shouldReceive('get')->with('keyValue')->andReturn(null)->once();
         $cacheMock->shouldReceive('set')->with('keyValue', $clientResponse, 10)->once();
 
-        $cachingClient = new CachingClient($clientMock, $cacheMock, $keyGeneratorMock, $lifetimeGeneratorMock);
+        $cachingClient = new CachingGetter($getterMock, $cacheMock, $keyGeneratorMock, $lifetimeGeneratorMock);
         $result = $cachingClient->get('pathValue', ['k' => 'v'], [200, 201]);
-
-        $this->assertEquals($clientResponse, $result);
-    }
-
-    public function testPostDoesNotInteractWithCache()
-    {
-        $clientResponse = new ClientResponse(
-            ['metaKey' => 'metaValue'],
-            ['dataKey' => 'dataValue']
-        );
-
-        $clientMock = Mockery::mock(ClientInterface::class);
-        $clientMock
-            ->shouldReceive('post')
-            ->with('pathValue', 'bodyValue', [200, 201])
-            ->andReturn($clientResponse)
-            ->once();
-
-        $cacheMock = Mockery::mock(CacheInterface::class);
-        $keyGeneratorMock = Mockery::mock(KeyGenerator::class);
-        $lifetimeGeneratorMock = Mockery::mock(LifetimeGenerator::class);
-
-        $cachingClient = new CachingClient($clientMock, $cacheMock, $keyGeneratorMock, $lifetimeGeneratorMock);
-        $result = $cachingClient->post('pathValue', 'bodyValue', [200, 201]);
-
-        $this->assertEquals($clientResponse, $result);
-    }
-
-    public function testPatchDoesNotInteractWithCache()
-    {
-        $clientResponse = new ClientResponse(
-            ['metaKey' => 'metaValue'],
-            ['dataKey' => 'dataValue']
-        );
-
-        $clientMock = Mockery::mock(ClientInterface::class);
-        $clientMock
-            ->shouldReceive('patch')
-            ->with('pathValue', 'bodyValue', [200, 201])
-            ->andReturn($clientResponse)
-            ->once();
-
-        $cacheMock = Mockery::mock(CacheInterface::class);
-        $keyGeneratorMock = Mockery::mock(KeyGenerator::class);
-        $lifetimeGeneratorMock = Mockery::mock(LifetimeGenerator::class);
-
-        $cachingClient = new CachingClient($clientMock, $cacheMock, $keyGeneratorMock, $lifetimeGeneratorMock);
-        $result = $cachingClient->patch('pathValue', 'bodyValue', [200, 201]);
 
         $this->assertEquals($clientResponse, $result);
     }

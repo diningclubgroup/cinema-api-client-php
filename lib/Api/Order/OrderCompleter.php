@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\Order;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\OrderCompletionResponse;
+use DCG\Cinema\Request\Client\Patcher;
 
 class OrderCompleter
 {
-    private $client;
+    private $patcher;
     private $orderCompletionResponseFactory;
 
     public function __construct(
-        ClientInterface $client,
+        Patcher $patcher,
         OrderCompletionResponseFactory $orderCompletionResponseFactory
     ) {
-        $this->client = $client;
+        $this->patcher = $patcher;
         $this->orderCompletionResponseFactory = $orderCompletionResponseFactory;
     }
 
@@ -27,7 +27,7 @@ class OrderCompleter
     public function completeOrder(string $transactionId, array $data = null): OrderCompletionResponse
     {
         $body = $data === null ? null : json_encode($data);
-        $clientResponse = $this->client->patch("transactions/{$transactionId}", $body);
+        $clientResponse = $this->patcher->patch("transactions/{$transactionId}", $body);
         return $this->orderCompletionResponseFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

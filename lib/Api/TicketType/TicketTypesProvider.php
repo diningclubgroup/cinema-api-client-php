@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\TicketType;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\TicketType;
+use DCG\Cinema\Request\Client\GetterInterface;
 
 class TicketTypesProvider
 {
-    private $client;
+    private $getter;
     private $ticketTypeFactory;
 
     public function __construct(
-        ClientInterface $client,
+        GetterInterface $getter,
         TicketTypeFactory $ticketTypeFactory
     ) {
-        $this->client = $client;
+        $this->getter = $getter;
         $this->ticketTypeFactory = $ticketTypeFactory;
     }
 
@@ -25,7 +25,7 @@ class TicketTypesProvider
      */
     public function getTicketTypes(string $chainId): array
     {
-        $clientResponse = $this->client->get("chains/{$chainId}/ticket-types");
+        $clientResponse = $this->getter->get("chains/{$chainId}/ticket-types");
 
         $ticketTypes = [];
         foreach ($clientResponse->getData() as $entry) {

@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\Order;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\Order;
+use DCG\Cinema\Request\Client\GetterInterface;
 
 class OrderProvider
 {
-    private $client;
+    private $getter;
     private $orderFactory;
 
     public function __construct(
-        ClientInterface $client,
+        GetterInterface $getter,
         OrderFactory $orderFactory
     ) {
-        $this->client = $client;
+        $this->getter = $getter;
         $this->orderFactory = $orderFactory;
     }
 
@@ -25,7 +25,7 @@ class OrderProvider
      */
     public function getOrder(string $orderId): Order
     {
-        $clientResponse = $this->client->get("orders/{$orderId}");
+        $clientResponse = $this->getter->get("orders/{$orderId}");
         return $this->orderFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

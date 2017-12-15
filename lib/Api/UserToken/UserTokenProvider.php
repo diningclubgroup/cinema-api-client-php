@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\UserToken;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\UserToken;
+use DCG\Cinema\Request\Client\Poster;
 
 class UserTokenProvider
 {
-    private $client;
+    private $poster;
     private $userTokenFactory;
 
     public function __construct(
-        ClientInterface $client,
+        Poster $poster,
         UserTokenFactory $userTokenFactory
     ) {
-        $this->client = $client;
+        $this->poster = $poster;
         $this->userTokenFactory = $userTokenFactory;
     }
 
@@ -27,7 +27,7 @@ class UserTokenProvider
      */
     public function getToken(string $userId): UserToken
     {
-        $clientResponse = $this->client->post("users/{$userId}/tokens");
+        $clientResponse = $this->poster->post("users/{$userId}/tokens");
         return $this->userTokenFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

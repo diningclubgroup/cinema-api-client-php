@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\User;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\User;
+use DCG\Cinema\Request\Client\GetterInterface;
 
 class UserProvider
 {
-    private $client;
+    private $getter;
     private $userFactory;
 
     public function __construct(
-        ClientInterface $client,
+        GetterInterface $getter,
         UserFactory $userFactory
     ) {
-        $this->client = $client;
+        $this->getter = $getter;
         $this->userFactory = $userFactory;
     }
 
@@ -25,7 +25,7 @@ class UserProvider
      */
     public function getUserByEmail(string $email): User
     {
-        $clientResponse = $this->client->get('users', ['email' => $email]);
+        $clientResponse = $this->getter->get('users', ['email' => $email]);
 
         if (!isset($clientResponse->getData()[0])) {
             throw new \RuntimeException('User not found');

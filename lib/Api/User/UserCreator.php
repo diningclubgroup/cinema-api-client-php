@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\User;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\User;
+use DCG\Cinema\Request\Client\Poster;
 
 class UserCreator
 {
-    private $client;
+    private $poster;
     private $userFactory;
 
     public function __construct(
-        ClientInterface $client,
+        Poster $poster,
         UserFactory $userFactory
     ) {
-        $this->client = $client;
+        $this->poster = $poster;
         $this->userFactory = $userFactory;
     }
 
@@ -25,7 +25,7 @@ class UserCreator
      */
     public function createUser(array $data): User
     {
-        $clientResponse = $this->client->post('users', json_encode($data));
+        $clientResponse = $this->poster->post('users', json_encode($data));
         return $this->userFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

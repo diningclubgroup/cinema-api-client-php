@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\Order;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\OrderCreationResponse;
+use DCG\Cinema\Request\Client\Poster;
 
 class OrderCreator
 {
-    private $client;
+    private $poster;
     private $orderCreationResponseFactory;
 
     public function __construct(
-        ClientInterface $client,
+        Poster $poster,
         OrderCreationResponseFactory $orderCreationResponseFactory
     ) {
-        $this->client = $client;
+        $this->poster = $poster;
         $this->orderCreationResponseFactory = $orderCreationResponseFactory;
     }
 
@@ -25,7 +25,7 @@ class OrderCreator
      */
     public function createOrder(array $data): OrderCreationResponse
     {
-        $clientResponse = $this->client->post('orders', json_encode($data));
+        $clientResponse = $this->poster->post('orders', json_encode($data));
         return $this->orderCreationResponseFactory->createFromClientResponseData($clientResponse->getData());
     }
 }

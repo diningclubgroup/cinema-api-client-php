@@ -2,19 +2,19 @@
 
 namespace DCG\Cinema\Api\Cinema;
 
-use DCG\Cinema\Request\Client\ClientInterface;
 use DCG\Cinema\Model\Cinema;
+use DCG\Cinema\Request\Client\GetterInterface;
 
 class CinemasProvider
 {
-    private $client;
+    private $getter;
     private $cinemaFactory;
 
     public function __construct(
-        ClientInterface $client,
+        GetterInterface $getter,
         CinemaFactory $cinemaFactory
     ) {
-        $this->client = $client;
+        $this->getter = $getter;
         $this->cinemaFactory = $cinemaFactory;
     }
 
@@ -25,7 +25,7 @@ class CinemasProvider
      */
     public function getCinemas(string $chainId): array
     {
-        $clientResponse = $this->client->get("chains/{$chainId}/cinemas");
+        $clientResponse = $this->getter->get("chains/{$chainId}/cinemas");
 
         $cinemas = [];
         foreach ($clientResponse->getData() as $entry) {
