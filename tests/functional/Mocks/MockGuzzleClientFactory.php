@@ -2,7 +2,6 @@
 
 namespace DCG\Cinema\Tests\Functional\Mocks;
 
-use DCG\Cinema\Model\UserToken;
 use DCG\Cinema\Request\Guzzle\GuzzleClientFactoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
@@ -31,18 +30,10 @@ class MockGuzzleClientFactory implements GuzzleClientFactoryInterface
     }
 
     /**
-     * @param UserToken $userToken
+     * @param array $headers
      * @return GuzzleClientInterface
      */
-    public function create(UserToken $userToken): GuzzleClientInterface
-    {
-        return $this->client;
-    }
-
-    /**
-     * @return GuzzleClientInterface
-     */
-    public function createUnauthenticated(): GuzzleClientInterface
+    public function create(array $headers = []): GuzzleClientInterface
     {
         return $this->client;
     }

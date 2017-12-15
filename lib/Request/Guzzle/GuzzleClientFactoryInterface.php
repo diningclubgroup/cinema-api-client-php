@@ -8,13 +8,8 @@ use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 interface GuzzleClientFactoryInterface
 {
     /**
-     * @param UserToken $userToken
+     * @param array $headers
      * @return GuzzleClientInterface
      */
-    public function create(UserToken $userToken): GuzzleClientInterface;
-
-    /**
-     * @return GuzzleClientInterface
-     */
-    public function createUnauthenticated(): GuzzleClientInterface;
+    public function create(array $headers = []): GuzzleClientInterface;
 }

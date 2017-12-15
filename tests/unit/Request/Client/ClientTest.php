@@ -2,16 +2,14 @@
 
 namespace DCG\Cinema\Tests\Unit\Request\Client;
 
-use DCG\Cinema\ActiveUserToken\ActiveUserTokenProvider;
-use DCG\Cinema\Exception\UserNotAuthenticatedException;
-use DCG\Cinema\Request\Client\UnauthenticatedClient;
+use DCG\Cinema\Request\Client\Client;
 use DCG\Cinema\Request\ClientResponse;
 use DCG\Cinema\Request\Guzzle\GuzzleClientFactoryInterface;
 use DCG\Cinema\Request\RequestSender;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class UnauthenticatedClientTest extends MockeryTestCase
+class ClientTest extends MockeryTestCase
 {
     public function tearDown()
     {
@@ -26,7 +24,7 @@ class UnauthenticatedClientTest extends MockeryTestCase
         $guzzleClientMock = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
         $guzzleClientFactoryMock = Mockery::mock(GuzzleClientFactoryInterface::class);
-        $guzzleClientFactoryMock->shouldReceive('createUnauthenticated')->andReturn($guzzleClientMock)->once();
+        $guzzleClientFactoryMock->shouldReceive('create')->andReturn($guzzleClientMock)->once();
 
         $requestSenderMock = Mockery::mock(RequestSender::class);
         $requestSenderMock
@@ -35,7 +33,7 @@ class UnauthenticatedClientTest extends MockeryTestCase
             ->andReturn($clientResponse)
             ->once();
 
-        $client = new UnauthenticatedClient($guzzleClientFactoryMock, $requestSenderMock);
+        $client = new Client($guzzleClientFactoryMock, $requestSenderMock);
         $result = $client->get('pathValue', ['queryKey' => 'queryValue'], [300]);
 
         $this->assertEquals($clientResponse, $result);
@@ -48,7 +46,7 @@ class UnauthenticatedClientTest extends MockeryTestCase
         $guzzleClientMock = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
         $guzzleClientFactoryMock = Mockery::mock(GuzzleClientFactoryInterface::class);
-        $guzzleClientFactoryMock->shouldReceive('createUnauthenticated')->andReturn($guzzleClientMock)->once();
+        $guzzleClientFactoryMock->shouldReceive('create')->andReturn($guzzleClientMock)->once();
 
         $requestSenderMock = Mockery::mock(RequestSender::class);
         $requestSenderMock
@@ -57,7 +55,7 @@ class UnauthenticatedClientTest extends MockeryTestCase
             ->andReturn($clientResponse)
             ->once();
 
-        $client = new UnauthenticatedClient($guzzleClientFactoryMock, $requestSenderMock);
+        $client = new Client($guzzleClientFactoryMock, $requestSenderMock);
         $result = $client->post('pathValue', 'bodyValue', [300]);
 
         $this->assertEquals($clientResponse, $result);
@@ -70,7 +68,7 @@ class UnauthenticatedClientTest extends MockeryTestCase
         $guzzleClientMock = Mockery::mock(\GuzzleHttp\ClientInterface::class);
 
         $guzzleClientFactoryMock = Mockery::mock(GuzzleClientFactoryInterface::class);
-        $guzzleClientFactoryMock->shouldReceive('createUnauthenticated')->andReturn($guzzleClientMock)->once();
+        $guzzleClientFactoryMock->shouldReceive('create')->andReturn($guzzleClientMock)->once();
 
         $requestSenderMock = Mockery::mock(RequestSender::class);
         $requestSenderMock
@@ -79,7 +77,7 @@ class UnauthenticatedClientTest extends MockeryTestCase
             ->andReturn($clientResponse)
             ->once();
 
-        $client = new UnauthenticatedClient($guzzleClientFactoryMock, $requestSenderMock);
+        $client = new Client($guzzleClientFactoryMock, $requestSenderMock);
         $result = $client->patch('pathValue', 'bodyValue', [300]);
 
         $this->assertEquals($clientResponse, $result);

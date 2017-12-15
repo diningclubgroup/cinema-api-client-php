@@ -30,7 +30,8 @@ use DCG\Cinema\Request\Cache\KeyGenerator;
 use DCG\Cinema\Request\Cache\LifetimeGenerator;
 use DCG\Cinema\Request\Client\AuthenticatedClient;
 use DCG\Cinema\Request\Client\CachingClient;
-use DCG\Cinema\Request\Client\UnauthenticatedClient;
+use DCG\Cinema\Request\Client\Client;
+use DCG\Cinema\Request\Guzzle\AuthenticatedGuzzleClientFactory;
 use DCG\Cinema\Request\Guzzle\GuzzleClientFactory;
 use DCG\Cinema\Request\Guzzle\GuzzleClientFactoryInterface;
 use DCG\Cinema\Request\RequestSender;
@@ -93,9 +94,14 @@ class Di
         $requestCacheLifetimeMaxSeconds
     ) {
         $activeUserTokenProvider = new ActiveUserTokenProvider($session);
+        $authenticatedGuzzleClientFactory = new AuthenticatedGuzzleClientFactory(
+            $guzzleClientFactory,
+            $activeUserTokenProvider
+        );
+
         $requestSender = new RequestSender();
-        $authenticatedClient = new AuthenticatedClient($guzzleClientFactory, $activeUserTokenProvider, $requestSender);
-        $unauthenticatedClient = new UnauthenticatedClient($guzzleClientFactory, $requestSender);
+        $unauthenticatedClient = new Client($guzzleClientFactory, $requestSender);
+        $authenticatedClient = new Client($authenticatedGuzzleClientFactory, $requestSender);
         $cachingAuthenticatedClient = new CachingClient(
             $authenticatedClient,
             $cache,
